@@ -1,0 +1,2399 @@
+/* dom.css - Stildatei für die DOM-Trading-Komponente */
+
+/* ============= DOM Container Stile ============= */
+/* DOM Container */
+.dom-container {
+    grid-area: dom-container;
+    overflow-y: auto;
+    position: relative;
+    background-color: #111;
+    scrollbar-width: thin;
+    scrollbar-color: #444 #222;
+    border: 1px solid #333;
+    border-radius: 0;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    color: #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.dom-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dom-container::-webkit-scrollbar-track {
+    background: #222;
+}
+
+.dom-container::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+.dom-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Container für Ask, Spread und Bid */
+.ask-container, .bid-container {
+    display: block;
+    width: 100%;
+}
+
+/* Container für Spread - VÖLLIG SEPARIERT */
+.spread-container {
+    display: block;
+    width: 100%;
+    margin: 0;
+    z-index: 100;
+    position: relative;
+}
+
+/* Die Spread-Zeile selbst */
+.spread-area {
+    background-color: #252525;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+    margin: 0;
+}
+
+/* Der Spread-Text selbst */
+.spread-text {
+    background-color: rgba(20, 20, 20, 0.8);
+    color: #ffd700; /* Gold-Farbe für den Spread */
+    font-weight: bold;
+    padding: 2px 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 2px #000;
+}
+
+/* Spread-Pfeile für Visualisierung der Spreadrichtung */
+.spread-arrows {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.spread-arrow {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffd700;
+    font-size: 14px;
+}
+
+.spread-arrow.left {
+    transform: rotate(90deg);
+    margin-left: 5px;
+}
+
+.spread-arrow.right {
+    transform: rotate(-90deg);
+    margin-right: 5px;
+}
+
+/* DOM Header */
+.dom-header {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    background-color: #222;
+    color: #aaa;
+    font-weight: bold;
+    font-size: 12px;
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.dom-header-cell {
+    padding: 6px 10px;
+    text-align: center;
+}
+
+.dom-header-bid {
+    text-align: center;
+    color: #4CAF50;
+}
+
+.dom-header-price {
+    text-align: center;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+}
+
+.dom-header-ask {
+    text-align: center;
+    color: #F44336;
+}
+
+/* ============= DOM Zeilen Stile ============= */
+/* Standard DOM-Zeile */
+.dom-row {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    grid-template-areas: "ask-volume price bid-volume";
+    position: relative;
+    height: 26px;
+    line-height: 26px;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 1px; /* Kleiner Abstand zwischen Zeilen */
+    transition: background-color 0.2s ease;
+}
+
+/* Erweiterte DOM-Zeile */
+.dom-row-extended {
+    display: grid;
+    grid-template-columns: 15% 20% 30% 20% 15%;
+    grid-template-areas: "total-left volume-left price volume-right total-right";
+    align-items: center;
+    padding: 2px 0;
+    position: relative;
+    height: 24px;
+    border-bottom: 1px solid #222;
+}
+
+/* Ask-Zeilen */
+.ask-row {
+    background-color: rgba(66, 33, 33, 0.1);
+}
+
+/* Bid-Zeilen */
+.bid-row {
+    background-color: rgba(33, 66, 33, 0.1);
+}
+
+/* Hover-Effekt für Zeilen */
+.dom-row:hover,
+.dom-row-extended:hover {
+    background-color: rgba(100, 100, 100, 0.15);
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Die verschiedenen Zellen im Grid */
+.dom-cell {
+    position: relative;
+}
+
+.dom-bid {
+    grid-area: bid-volume;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 10px;
+    color: #ddd;
+    background-color: rgba(33, 66, 33, 0.1);
+    border-left: 1px solid #222;
+}
+
+.dom-price {
+    grid-area: price;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(30, 30, 30, 0.9);
+    position: relative;
+    z-index: 5;
+    border-radius: 0;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.dom-ask {
+    grid-area: ask-volume;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px;
+    color: #ddd;
+    background-color: rgba(66, 33, 33, 0.1);
+    border-right: 1px solid #222;
+}
+
+/* Volumenanzeige verbessert */
+.dom-volume {
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+}
+
+/* Erweiterte Grid-Zellen */
+.total-cell, .volume-cell, .price-cell {
+    padding: 0 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.total-cell {
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.total-cell:nth-of-type(1) {
+    grid-area: total-left;
+    text-align: right;
+}
+
+.total-cell:nth-of-type(5) {
+    grid-area: total-right;
+    text-align: left;
+}
+
+.volume-cell {
+    position: relative;
+}
+
+.volume-cell:nth-of-type(2) {
+    grid-area: volume-left;
+    text-align: right;
+}
+
+.volume-cell:nth-of-type(4) {
+    grid-area: volume-right;
+    text-align: left;
+}
+
+/* WICHTIG: VERBESSERTE PREISANZEIGE, IMMER LESBAR */
+.price-cell {
+    grid-area: price;
+    text-align: center;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0 8px;
+    margin: 0 4px;
+    border-radius: 2px;
+    border-left: 1px dotted rgba(100, 100, 100, 0.1);
+    border-right: 1px dotted rgba(100, 100, 100, 0.1);
+}
+
+.dom-price .bid-price {
+    color: #00cc00;
+    font-weight: bold;
+}
+
+.dom-price .ask-price {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+/* Farbcode für die Preise je nach Position */
+.ask-row .dom-price {
+    color: #ff4444;
+}
+
+.bid-row .dom-price {
+    color: #00cc00;
+}
+
+/* ============= Volume-Bar Stile ============= */
+/* Volume bars */
+.volume-bar {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.4;
+}
+
+.bid-volume-bar {
+    background-color: rgba(76, 175, 80, 0.8);
+    left: 0;
+}
+
+.ask-volume-bar {
+    background-color: rgba(244, 67, 54, 0.8);
+    right: 0;
+}
+
+/* Volume-Skala - für große Volumina bis 10.000 Lots */
+.volume-scale {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
+
+.volume-scale-marker {
+    position: absolute;
+    height: 100%;
+    border-right: 1px dotted rgba(255, 255, 255, 0.1);
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.bid-volume-scale .volume-scale-marker {
+    border-left: 1px dotted rgba(255, 255, 255, 0.1);
+    border-right: none;
+    justify-content: flex-end;
+}
+
+/* Spezielle Volume-Bars */
+.bid-volume-bar-alt {
+    right: 0;
+    background-color: rgba(0, 153, 51, 0.5);
+}
+
+.ask-volume-bar-alt {
+    left: 0;
+    background-color: rgba(153, 51, 51, 0.5);
+}
+
+/* ============= Preis-Stile ============= */
+/* Highlight current price */
+.current-price-row {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-top: 1px solid rgba(255, 215, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.4);
+    height: 30px !important;
+    z-index: 8;
+    position: relative;
+}
+
+.current-price-row .dom-price {
+    background-color: rgba(40, 40, 40, 0.95);
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(255, 215, 0, 0.7);
+}
+
+.current-price-row::before {
+    content: "➜";
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffd700;
+    font-size: 18px;
+    z-index: 10;
+}
+
+.current-price-row::after {
+    content: "➜";
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
+    color: #ffd700;
+    font-size: 18px;
+    z-index: 10;
+}
+
+/* Current-Price-Marker (goldener Punkt) */
+.current-price-marker {
+    color: #ffd700;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 2px;
+    vertical-align: middle;
+}
+
+/* Order-Typ-Marker verbeassert */
+.order-type-marker {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    margin-right: 5px;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Verbesserter Stil für aktuelle Preiszeile */
+.current-price-row-enhanced {
+    background-color: rgba(255, 215, 0, 0.07) !important;
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    position: relative;
+    font-weight: bold;
+    z-index: 5;
+    height: 26px !important;
+}
+
+/* Zeilen nahe des aktuellen Preises */
+.near-price-row {
+    background-color: rgba(255, 215, 0, 0.03) !important;
+}
+
+/* Zusätzliche Hervorhebungen für aktuelle Preiszeile */
+.current-price-row .price-cell,
+.current-price-row-enhanced .price-cell {
+    font-weight: bold;
+    text-shadow: 0 0 3px rgba(255, 215, 0, 0.4);
+}
+
+/* Hover-Effekt für bessere Interaktivität */
+.dom-row:hover .price-cell,
+.dom-row-extended:hover .price-cell {
+    background-color: rgba(60, 60, 60, 0.9);
+}
+
+/* ============= Spread-Stile ============= */
+/* Spread row */
+.spread-row {
+    background-color: #252525;
+    color: #fff;
+    height: 28px;
+    line-height: 28px;
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+    position: relative;
+    z-index: 10;
+    margin: 2px 0;
+}
+
+.spread-row .dom-price {
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+    color: #ffd700; /* Gold für bessere Sichtbarkeit */
+    background-color: rgba(40, 40, 40, 0.95);
+    border-radius: 4px;
+    padding: 3px 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.spread-row .dom-bid, .spread-row .dom-ask {
+    background-color: #333;
+}
+
+/* ============= Order-Marker Stile ============= */
+/* Order type markers */
+.order-type {
+    position: relative;
+    z-index: 2;
+    margin-right: 5px;
+}
+
+.limit-marker {
+    color: #4CAF50;
+}
+
+.stop-marker {
+    color: #FF9800;
+}
+
+.market-marker {
+    color: #F44336;
+}
+
+/* Order-Typ-Marker (erweitert) */
+.order-type-marker {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    margin-right: 3px;
+    font-size: 0.7rem;
+    line-height: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.market-order {
+    background-color: #c5a400;
+    color: #000;
+}
+
+.limit-order {
+    background-color: #006699;
+    color: #fff;
+}
+
+.stop-order {
+    background-color: #990000;
+    color: #fff;
+}
+
+.iceberg-order {
+    background-color: #666;
+    color: #fff;
+}
+
+/* ============= Animation Stile ============= */
+/* Animation for price changes */
+@keyframes flash-up {
+    0% { background-color: rgba(76, 175, 80, 0.5); }
+    100% { background-color: transparent; }
+}
+
+@keyframes flash-down {
+    0% { background-color: rgba(244, 67, 54, 0.5); }
+    100% { background-color: transparent; }
+}
+
+.flash-up {
+    animation: flash-up 0.8s;
+}
+
+.flash-down {
+    animation: flash-down 0.8s;
+}
+
+/* Verbesserte Animationen für Preisänderungen */
+@keyframes price-up-flash {
+    0%, 100% { background-color: rgba(0, 204, 0, 0.1); }
+    50% { background-color: rgba(0, 204, 0, 0.4); }
+}
+
+@keyframes price-down-flash {
+    0%, 100% { background-color: rgba(204, 0, 0, 0.1); }
+    50% { background-color: rgba(204, 0, 0, 0.4); }
+}
+
+.price-up-flash {
+    animation: price-up-flash 0.8s ease-in-out;
+}
+
+.price-down-flash {
+    animation: price-down-flash 0.8s ease-in-out;
+}
+
+/* Verbesserte Animations für Preisveränderungen */
+@keyframes price-up-anim {
+    0% { color: #00ff00; text-shadow: 0 0 5px rgba(0, 255, 0, 0.7); }
+    100% { color: inherit; text-shadow: none; }
+}
+
+@keyframes price-down-anim {
+    0% { color: #ff0000; text-shadow: 0 0 5px rgba(255, 0, 0, 0.7); }
+    100% { color: inherit; text-shadow: none; }
+}
+
+.price-up-anim .price-cell {
+    animation: price-up-anim 1s ease-out;
+}
+
+.price-down-anim .price-cell {
+    animation: price-down-anim 1s ease-out;
+}
+
+/* Verbesserte Order-Verarbeitungsanimationen */
+@keyframes processing-bid-flow {
+    0% { width: 0; left: 0; opacity: 0.8; }
+    100% { width: 100%; left: 0; opacity: 0; }
+}
+
+@keyframes processing-ask-flow {
+    0% { width: 0; right: 0; opacity: 0.8; }
+    100% { width: 100%; right: 0; opacity: 0; }
+}
+
+.processing-bid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 0;
+    background: linear-gradient(90deg, rgba(0, 204, 0, 0), rgba(0, 204, 0, 0.5), rgba(0, 204, 0, 0));
+    animation: processing-bid-flow 1s infinite;
+    z-index: 5;
+}
+
+.processing-ask::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    right: 0;
+    width: 0;
+    background: linear-gradient(90deg, rgba(204, 0, 0, 0), rgba(204, 0, 0, 0.5), rgba(204, 0, 0, 0));
+    animation: processing-ask-flow 1s infinite;
+    z-index: 5;
+}
+
+/* Processing-Indikatoren */
+.processing-bid-indicator, .processing-ask-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.processing-bid-indicator {
+    background-color: #00cc00;
+    box-shadow: 0 0 5px #00cc00;
+    animation: pulse 1s infinite;
+}
+
+.processing-ask-indicator {
+    background-color: #cc0000;
+    box-shadow: 0 0 5px #cc0000;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ============= DYNAMISCHE FLUSSBALKEN FÜR PREISBEWEGUNG ============= */
+/* Flussvisualisierung Bid/Ask */
+@keyframes flow-to-bid {
+    0% { width: 0; opacity: 0.7; }
+    100% { width: 100%; opacity: 0; }
+}
+
+@keyframes flow-to-ask {
+    0% { width: 0; opacity: 0.7; }
+    100% { width: 100%; opacity: 0; }
+}
+
+/* Balken für Bid-Fluss (nach unten) */
+.flow-to-bid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, rgba(0, 153, 51, 0), rgba(0, 153, 51, 0.5), rgba(0, 153, 51, 0));
+    animation: flow-to-bid 1s ease-out;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Balken für Ask-Fluss (nach oben) */
+.flow-to-ask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, rgba(153, 51, 51, 0), rgba(153, 51, 51, 0.5), rgba(153, 51, 51, 0));
+    animation: flow-to-ask 1s ease-out;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Indikatoren für die Richtung */
+.bid-direction-indicator {
+    position: absolute;
+    bottom: 2px;
+    left: 5px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 4px 0 4px;
+    border-color: rgba(0, 153, 51, 0.8) transparent transparent transparent;
+    opacity: 0;
+    animation: fade-in-out 1s ease-in-out;
+}
+
+.ask-direction-indicator {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent rgba(153, 51, 51, 0.8) transparent;
+    opacity: 0;
+    animation: fade-in-out 1s ease-in-out;
+}
+
+@keyframes fade-in-out {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ============= VOLUMENVISUALISIERUNG AM RAND ============= */
+/* Container für die Volumenvisualisierung */
+.volume-visualization-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 20px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.bid-volume-visualization {
+    left: 0;
+}
+
+.ask-volume-visualization {
+    right: 0;
+}
+
+/* Vertikale Linien für das Volumen */
+.volume-line {
+    position: absolute;
+    width: 3px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 1px;
+}
+
+.bid-volume-line {
+    left: 5px;
+    bottom: 0;
+    background-color: rgba(0, 153, 51, 0.4);
+}
+
+.bid-volume-line.active {
+    background-color: rgba(0, 204, 0, 0.7);
+    box-shadow: 0 0 3px rgba(0, 204, 0, 0.5);
+}
+
+.ask-volume-line {
+    right: 5px;
+    top: 0;
+    background-color: rgba(153, 51, 51, 0.4);
+}
+
+.ask-volume-line.active {
+    background-color: rgba(204, 0, 0, 0.7);
+    box-shadow: 0 0 3px rgba(204, 0, 0, 0.5);
+}
+
+/* ============= Liquiditätsfluss Stile ============= */
+/* Liquiditätsfluss-Visualisierung */
+@keyframes flow-to-bid-liquid {
+    0% { width: 0; height: 2px; opacity: 0.8; right: 100%; }
+    100% { width: 100%; height: 2px; opacity: 0; right: 0; }
+}
+
+@keyframes flow-to-ask-liquid {
+    0% { width: 0; height: 2px; opacity: 0.8; left: 100%; }
+    100% { width: 100%; height: 2px; opacity: 0; left: 0; }
+}
+
+.liquidity-flow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 2px;
+    z-index: 10;
+}
+
+.flow-to-bid-liquid {
+    background: linear-gradient(90deg, rgba(0, 204, 0, 0), rgba(0, 204, 0, 0.7), rgba(0, 204, 0, 0));
+    animation: flow-to-bid-liquid 0.8s ease-out;
+    animation-fill-mode: forwards;
+}
+
+.flow-to-ask-liquid {
+    background: linear-gradient(90deg, rgba(204, 0, 0, 0), rgba(204, 0, 0, 0.7), rgba(204, 0, 0, 0));
+    animation: flow-to-ask-liquid 0.8s ease-out;
+    animation-fill-mode: forwards;
+}
+
+/* ============= Indikatoren Stile ============= */
+/* Aufwärts-/Abwärtsüberhang-Indikatoren für Strike-Preis */
+.strike-price-above::before,
+.strike-price-below::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 5;
+}
+
+.strike-price-above::before {
+    top: -3px;
+    background: linear-gradient(90deg, #004d00, #00cc00, #004d00);
+    box-shadow: 0 0 4px rgba(0, 204, 0, 0.6);
+}
+
+.strike-price-below::before {
+    bottom: -3px;
+    background: linear-gradient(90deg, #4d0000, #cc0000, #4d0000);
+    box-shadow: 0 0 4px rgba(204, 0, 0, 0.6);
+}
+
+/* Trend-Indikatoren */
+.price-trend-indicator {
+    position: absolute;
+    right: -2px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.trend-up {
+    bottom: 2px;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent #00cc00 transparent;
+}
+
+.trend-down {
+    top: 2px;
+    border-width: 6px 4px 0 4px;
+    border-color: #cc0000 transparent transparent transparent;
+}
+
+/* Dominanzindikatoren */
+.bid-dominant {
+    border-right: 3px solid rgba(0, 204, 0, 0.6);
+}
+
+.ask-dominant {
+    border-left: 3px solid rgba(204, 0, 0, 0.6);
+}
+
+/* ============= Profil und Marker Stile ============= */
+/* Volumen-Profil am rechten Rand */
+.volume-profile-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.volume-profile-bar {
+    position: absolute;
+    right: 0;
+    height: 20px;
+    background-color: rgba(150, 150, 150, 0.3);
+}
+
+.bid-dominant-profile {
+    background-color: rgba(0, 153, 51, 0.3);
+}
+
+.ask-dominant-profile {
+    background-color: rgba(153, 51, 51, 0.3);
+}
+
+.neutral-profile {
+    background-color: rgba(150, 150, 150, 0.3);
+}
+
+/* Order-Ausführungsmarker */
+.executed-order-marker {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #ffd700;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: executed 0.5s ease-in-out;
+}
+
+@keyframes executed {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+.pending-order-marker {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: rgba(255, 215, 0, 0.4);
+    border: 1px solid #ffd700;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* Neue Order Highlighting */
+.new-order {
+    animation: new-order-anim 1s ease-out;
+}
+
+@keyframes new-order-anim {
+    0% { background-color: rgba(255, 255, 255, 0.2); }
+    100% { background-color: transparent; }
+}
+
+/* Großer Player Markierung */
+.big-player-marker {
+    position: relative;
+}
+
+.big-player-marker::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 5px;
+    background-color: #ff00ff;
+    border-radius: 50%;
+}
+
+/* ============= Tooltip und UI Stile ============= */
+/* Tooltip für Order-Details */
+.tooltip {
+    display: none;
+    position: absolute;
+    background-color: rgba(20, 20, 20, 0.9);
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 0.7rem;
+    max-width: 250px;
+    z-index: 100;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.dom-row:hover .tooltip,
+.dom-row-extended:hover .tooltip {
+    display: block;
+}
+
+/* Preisspannen-Kontrollen */
+.price-range-controls {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #222;
+    border-bottom: 1px solid #333;
+    gap: 10px;
+}
+
+.price-range-label {
+    color: #aaa;
+    font-size: 0.85rem;
+}
+
+.price-range-input {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #ddd;
+    padding: 3px 5px;
+    width: 60px;
+    border-radius: 3px;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    color: #aaa;
+    gap: 5px;
+    cursor: pointer;
+}
+
+/* Verschiedene Ansichtsmodi */
+.dom-view-compact .dom-row,
+.dom-view-compact .dom-row-extended {
+    height: 18px;
+    font-size: 0.75rem;
+}
+
+.dom-view-expanded .dom-row,
+.dom-view-expanded .dom-row-extended {
+    height: 30px;
+    font-size: 0.9rem;
+}
+
+/* Styles für Marktneigung */
+.market-bullish .current-price-row,
+.market-bullish .current-price-row-enhanced {
+    background-color: rgba(0, 204, 0, 0.05) !important;
+}
+
+.market-bearish .current-price-row,
+.market-bearish .current-price-row-enhanced {
+    background-color: rgba(204, 0, 0, 0.05) !important;
+}
+
+/* Responsive DOM Anpassungen */
+@media (max-width: 768px) {
+    .dom-row-extended {
+        grid-template-columns: 10% 25% 30% 25% 10%;
+    }
+    
+    .price-cell {
+        font-size: 0.8rem;
+    }
+    
+    .volume-cell, .total-cell {
+        font-size: 0.7rem;
+    }
+}
+
+/* Anpassungen für kleinere Bildschirme */
+@media (max-height: 600px) {
+    .dom-container {
+        max-height: 70vh;
+    }
+    
+    .dom-row,
+    .dom-row-extended {
+        height: 20px;
+    }
+    
+    .price-range-controls {
+        padding: 3px;
+        font-size: 0.8rem;
+    }
+}a/* dom.css - Stildatei für die DOM-Trading-Komponente */
+
+/* ============= DOM Container Stile ============= */
+/* DOM Container */
+.dom-container {
+    grid-area: dom-container;
+    overflow-y: auto;
+    position: relative;
+    background-color: #111;
+    border: 1px solid #333;
+    border-radius: 0;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    color: #ddd;
+    display: flex;
+    flex-direction: column;
+    
+    .dom-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dom-container::-webkit-scrollbar-track {
+    background: #222;
+}
+
+.dom-container::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+.dom-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+}
+
+.dom-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dom-container::-webkit-scrollbar-track {
+    background: #222;
+}
+
+.dom-container::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+.dom-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Container für Ask, Spread und Bid */
+.ask-container, .bid-container {
+    display: block;
+    width: 100%;
+}
+
+/* Container für Spread - VÖLLIG SEPARIERT */
+.spread-container {
+    display: block;
+    width: 100%;
+    margin: 0;
+    z-index: 100;
+    position: relative;
+}
+
+/* Die Spread-Zeile selbst */
+.spread-area {
+    background-color: #252525;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+    margin: 0;
+}
+
+/* Der Spread-Text selbst */
+.spread-text {
+    background-color: rgba(20, 20, 20, 0.8);
+    color: #ffd700; /* Gold-Farbe für den Spread */
+    font-weight: bold;
+    padding: 2px 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 2px #000;
+}
+
+/* Spread-Pfeile für Visualisierung der Spreadrichtung */
+.spread-arrows {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+.spread-arrow {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffd700;
+    font-size: 14px;
+}
+
+.spread-arrow.left {
+    transform: rotate(90deg);
+    margin-left: 5px;
+}
+
+.spread-arrow.right {
+    transform: rotate(-90deg);
+    margin-right: 5px;
+}
+
+/* DOM Header */
+.dom-header {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    background-color: #222;
+    color: #aaa;
+    font-weight: bold;
+    font-size: 12px;
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.dom-header-cell {
+    padding: 6px 10px;
+    text-align: center;
+}
+
+.dom-header-bid {
+    text-align: center;
+    color: #4CAF50;
+}
+
+.dom-header-price {
+    text-align: center;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+}
+
+.dom-header-ask {
+    text-align: center;
+    color: #F44336;
+}
+
+/* ============= DOM Zeilen Stile ============= */
+/* Standard DOM-Zeile */
+.dom-row {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    grid-template-areas: "ask-volume price bid-volume";
+    position: relative;
+    height: 26px;
+    line-height: 26px;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 1px; /* Kleiner Abstand zwischen Zeilen */
+    transition: background-color 0.2s ease;
+}
+
+/* Erweiterte DOM-Zeile */
+.dom-row-extended {
+    display: grid;
+    grid-template-columns: 15% 20% 30% 20% 15%;
+    grid-template-areas: "total-left volume-left price volume-right total-right";
+    align-items: center;
+    padding: 2px 0;
+    position: relative;
+    height: 24px;
+    border-bottom: 1px solid #222;
+}
+
+/* Ask-Zeilen */
+.ask-row {
+    background-color: rgba(66, 33, 33, 0.1);
+}
+
+/* Bid-Zeilen */
+.bid-row {
+    background-color: rgba(33, 66, 33, 0.1);
+}
+
+/* Hover-Effekt für Zeilen */
+.dom-row:hover,
+.dom-row-extended:hover {
+    background-color: rgba(100, 100, 100, 0.15);
+    cursor: pointer;
+    z-index: 10;
+}
+
+/* Die verschiedenen Zellen im Grid */
+.dom-cell {
+    position: relative;
+}
+
+.dom-bid {
+    grid-area: bid-volume;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 10px;
+    color: #ddd;
+    background-color: rgba(33, 66, 33, 0.1);
+    border-left: 1px solid #222;
+}
+
+.dom-price {
+    grid-area: price;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background-color: rgba(30, 30, 30, 0.9);
+    position: relative;
+    z-index: 5;
+    border-radius: 0;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.dom-ask {
+    grid-area: ask-volume;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 10px;
+    color: #ddd;
+    background-color: rgba(66, 33, 33, 0.1);
+    border-right: 1px solid #222;
+}
+
+/* Volumenanzeige verbessert */
+.dom-volume {
+    font-weight: bold;
+    position: relative;
+    z-index: 2;
+}
+
+/* Erweiterte Grid-Zellen */
+.total-cell, .volume-cell, .price-cell {
+    padding: 0 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.total-cell {
+    color: #777;
+    font-size: 0.75rem;
+}
+
+.total-cell:nth-of-type(1) {
+    grid-area: total-left;
+    text-align: right;
+}
+
+.total-cell:nth-of-type(5) {
+    grid-area: total-right;
+    text-align: left;
+}
+
+.volume-cell {
+    position: relative;
+}
+
+.volume-cell:nth-of-type(2) {
+    grid-area: volume-left;
+    text-align: right;
+}
+
+.volume-cell:nth-of-type(4) {
+    grid-area: volume-right;
+    text-align: left;
+}
+
+/* WICHTIG: VERBESSERTE PREISANZEIGE, IMMER LESBAR */
+.price-cell {
+    grid-area: price;
+    text-align: center;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0 8px;
+    margin: 0 4px;
+    border-radius: 2px;
+    border-left: 1px dotted rgba(100, 100, 100, 0.1);
+    border-right: 1px dotted rgba(100, 100, 100, 0.1);
+}
+
+.dom-price .bid-price {
+    color: #00cc00;
+    font-weight: bold;
+}
+
+.dom-price .ask-price {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+/* Farbcode für die Preise je nach Position */
+.ask-row .dom-price {
+    color: #ff4444;
+}
+
+.bid-row .dom-price {
+    color: #00cc00;
+}
+
+/* ============= Volume-Bar Stile ============= */
+/* Volume bars */
+.volume-bar {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+    opacity: 0.4;
+}
+
+.bid-volume-bar {
+    background-color: rgba(76, 175, 80, 0.8);
+    left: 0;
+}
+
+.ask-volume-bar {
+    background-color: rgba(244, 67, 54, 0.8);
+    right: 0;
+}
+
+/* Volume-Skala - für große Volumina bis 10.000 Lots */
+.volume-scale {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+}
+
+.volume-scale-marker {
+    position: absolute;
+    height: 100%;
+    border-right: 1px dotted rgba(255, 255, 255, 0.1);
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.bid-volume-scale .volume-scale-marker {
+    border-left: 1px dotted rgba(255, 255, 255, 0.1);
+    border-right: none;
+    justify-content: flex-end;
+}
+
+/* Spezielle Volume-Bars */
+.bid-volume-bar-alt {
+    right: 0;
+    background-color: rgba(0, 153, 51, 0.5);
+}
+
+.ask-volume-bar-alt {
+    left: 0;
+    background-color: rgba(153, 51, 51, 0.5);
+}
+
+/* ============= Preis-Stile ============= */
+/* Highlight current price */
+.current-price-row {
+    background-color: rgba(255, 215, 0, 0.1);
+    border-top: 1px solid rgba(255, 215, 0, 0.4);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.4);
+    height: 30px !important;
+    z-index: 8;
+    position: relative;
+}
+
+.current-price-row .dom-price {
+    background-color: rgba(40, 40, 40, 0.95);
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(255, 215, 0, 0.7);
+}
+
+.current-price-row::before {
+    content: "➜";
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffd700;
+    font-size: 18px;
+    z-index: 10;
+}
+
+.current-price-row::after {
+    content: "➜";
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
+    color: #ffd700;
+    font-size: 18px;
+    z-index: 10;
+}
+
+/* Current-Price-Marker (goldener Punkt) */
+.current-price-marker {
+    color: #ffd700;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 2px;
+    vertical-align: middle;
+}
+
+/* Order-Typ-Marker verbeassert */
+.order-type-marker {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    margin-right: 5px;
+    font-size: 10px;
+    line-height: 16px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Verbesserter Stil für aktuelle Preiszeile */
+.current-price-row-enhanced {
+    background-color: rgba(255, 215, 0, 0.07) !important;
+    border-top: 1px solid rgba(255, 215, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+    position: relative;
+    font-weight: bold;
+    z-index: 5;
+    height: 26px !important;
+}
+
+/* Zeilen nahe des aktuellen Preises */
+.near-price-row {
+    background-color: rgba(255, 215, 0, 0.03) !important;
+}
+
+/* Zusätzliche Hervorhebungen für aktuelle Preiszeile */
+.current-price-row .price-cell,
+.current-price-row-enhanced .price-cell {
+    font-weight: bold;
+    text-shadow: 0 0 3px rgba(255, 215, 0, 0.4);
+}
+
+/* Hover-Effekt für bessere Interaktivität */
+.dom-row:hover .price-cell,
+.dom-row-extended:hover .price-cell {
+    background-color: rgba(60, 60, 60, 0.9);
+}
+
+/* ============= Spread-Stile ============= */
+/* Spread row */
+.spread-row {
+    background-color: #252525;
+    color: #fff;
+    height: 28px;
+    line-height: 28px;
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+    position: relative;
+    z-index: 10;
+    margin: 2px 0;
+}
+
+.spread-row .dom-price {
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+    color: #ffd700; /* Gold für bessere Sichtbarkeit */
+    background-color: rgba(40, 40, 40, 0.95);
+    border-radius: 4px;
+    padding: 3px 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.spread-row .dom-bid, .spread-row .dom-ask {
+    background-color: #333;
+}
+
+/* ============= Order-Marker Stile ============= */
+/* Order type markers */
+.order-type {
+    position: relative;
+    z-index: 2;
+    margin-right: 5px;
+}
+
+.limit-marker {
+    color: #4CAF50;
+}
+
+.stop-marker {
+    color: #FF9800;
+}
+
+.market-marker {
+    color: #F44336;
+}
+
+/* Order-Typ-Marker (erweitert) */
+.order-type-marker {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    margin-right: 3px;
+    font-size: 0.7rem;
+    line-height: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.market-order {
+    background-color: #c5a400;
+    color: #000;
+}
+
+.limit-order {
+    background-color: #006699;
+    color: #fff;
+}
+
+.stop-order {
+    background-color: #990000;
+    color: #fff;
+}
+
+.iceberg-order {
+    background-color: #666;
+    color: #fff;
+}
+
+/* ============= Animation Stile ============= */
+/* Animation for price changes */
+@keyframes flash-up {
+    0% { background-color: rgba(76, 175, 80, 0.5); }
+    100% { background-color: transparent; }
+}
+
+@keyframes flash-down {
+    0% { background-color: rgba(244, 67, 54, 0.5); }
+    100% { background-color: transparent; }
+}
+
+.flash-up {
+    animation: flash-up 0.8s;
+}
+
+.flash-down {
+    animation: flash-down 0.8s;
+}
+
+/* Verbesserte Animationen für Preisänderungen */
+@keyframes price-up-flash {
+    0%, 100% { background-color: rgba(0, 204, 0, 0.1); }
+    50% { background-color: rgba(0, 204, 0, 0.4); }
+}
+
+@keyframes price-down-flash {
+    0%, 100% { background-color: rgba(204, 0, 0, 0.1); }
+    50% { background-color: rgba(204, 0, 0, 0.4); }
+}
+
+.price-up-flash {
+    animation: price-up-flash 0.8s ease-in-out;
+}
+
+.price-down-flash {
+    animation: price-down-flash 0.8s ease-in-out;
+}
+
+/* Verbesserte Animations für Preisveränderungen */
+@keyframes price-up-anim {
+    0% { color: #00ff00; text-shadow: 0 0 5px rgba(0, 255, 0, 0.7); }
+    100% { color: inherit; text-shadow: none; }
+}
+
+@keyframes price-down-anim {
+    0% { color: #ff0000; text-shadow: 0 0 5px rgba(255, 0, 0, 0.7); }
+    100% { color: inherit; text-shadow: none; }
+}
+
+.price-up-anim .price-cell {
+    animation: price-up-anim 1s ease-out;
+}
+
+.price-down-anim .price-cell {
+    animation: price-down-anim 1s ease-out;
+}
+
+/* Verbesserte Order-Verarbeitungsanimationen */
+@keyframes processing-bid-flow {
+    0% { width: 0; left: 0; opacity: 0.8; }
+    100% { width: 100%; left: 0; opacity: 0; }
+}
+
+@keyframes processing-ask-flow {
+    0% { width: 0; right: 0; opacity: 0.8; }
+    100% { width: 100%; right: 0; opacity: 0; }
+}
+
+.processing-bid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 0;
+    background: linear-gradient(90deg, rgba(0, 204, 0, 0), rgba(0, 204, 0, 0.5), rgba(0, 204, 0, 0));
+    animation: processing-bid-flow 1s infinite;
+    z-index: 5;
+}
+
+.processing-ask::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    right: 0;
+    width: 0;
+    background: linear-gradient(90deg, rgba(204, 0, 0, 0), rgba(204, 0, 0, 0.5), rgba(204, 0, 0, 0));
+    animation: processing-ask-flow 1s infinite;
+    z-index: 5;
+}
+
+/* Processing-Indikatoren */
+.processing-bid-indicator, .processing-ask-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.processing-bid-indicator {
+    background-color: #00cc00;
+    box-shadow: 0 0 5px #00cc00;
+    animation: pulse 1s infinite;
+}
+
+.processing-ask-indicator {
+    background-color: #cc0000;
+    box-shadow: 0 0 5px #cc0000;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ============= DYNAMISCHE FLUSSBALKEN FÜR PREISBEWEGUNG ============= */
+/* Flussvisualisierung Bid/Ask */
+@keyframes flow-to-bid {
+    0% { width: 0; opacity: 0.7; }
+    100% { width: 100%; opacity: 0; }
+}
+
+@keyframes flow-to-ask {
+    0% { width: 0; opacity: 0.7; }
+    100% { width: 100%; opacity: 0; }
+}
+
+/* Balken für Bid-Fluss (nach unten) */
+.flow-to-bid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, rgba(0, 153, 51, 0), rgba(0, 153, 51, 0.5), rgba(0, 153, 51, 0));
+    animation: flow-to-bid 1s ease-out;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Balken für Ask-Fluss (nach oben) */
+.flow-to-ask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, rgba(153, 51, 51, 0), rgba(153, 51, 51, 0.5), rgba(153, 51, 51, 0));
+    animation: flow-to-ask 1s ease-out;
+    animation-fill-mode: forwards;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Indikatoren für die Richtung */
+.bid-direction-indicator {
+    position: absolute;
+    bottom: 2px;
+    left: 5px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 4px 0 4px;
+    border-color: rgba(0, 153, 51, 0.8) transparent transparent transparent;
+    opacity: 0;
+    animation: fade-in-out 1s ease-in-out;
+}
+
+.ask-direction-indicator {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent rgba(153, 51, 51, 0.8) transparent;
+    opacity: 0;
+    animation: fade-in-out 1s ease-in-out;
+}
+
+@keyframes fade-in-out {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ============= VOLUMENVISUALISIERUNG AM RAND ============= */
+/* Container für die Volumenvisualisierung */
+.volume-visualization-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 20px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.bid-volume-visualization {
+    left: 0;
+}
+
+.ask-volume-visualization {
+    right: 0;
+}
+
+/* Vertikale Linien für das Volumen */
+.volume-line {
+    position: absolute;
+    width: 3px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 1px;
+}
+
+.bid-volume-line {
+    left: 5px;
+    bottom: 0;
+    background-color: rgba(0, 153, 51, 0.4);
+}
+
+.bid-volume-line.active {
+    background-color: rgba(0, 204, 0, 0.7);
+    box-shadow: 0 0 3px rgba(0, 204, 0, 0.5);
+}
+
+.ask-volume-line {
+    right: 5px;
+    top: 0;
+    background-color: rgba(153, 51, 51, 0.4);
+}
+
+.ask-volume-line.active {
+    background-color: rgba(204, 0, 0, 0.7);
+    box-shadow: 0 0 3px rgba(204, 0, 0, 0.5);
+}
+
+/* ============= Liquiditätsfluss Stile ============= */
+/* Liquiditätsfluss-Visualisierung */
+@keyframes flow-to-bid-liquid {
+    0% { width: 0; height: 2px; opacity: 0.8; right: 100%; }
+    100% { width: 100%; height: 2px; opacity: 0; right: 0; }
+}
+
+@keyframes flow-to-ask-liquid {
+    0% { width: 0; height: 2px; opacity: 0.8; left: 100%; }
+    100% { width: 100%; height: 2px; opacity: 0; left: 0; }
+}
+
+.liquidity-flow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 2px;
+    z-index: 10;
+}
+
+.flow-to-bid-liquid {
+    background: linear-gradient(90deg, rgba(0, 204, 0, 0), rgba(0, 204, 0, 0.7), rgba(0, 204, 0, 0));
+    animation: flow-to-bid-liquid 0.8s ease-out;
+    animation-fill-mode: forwards;
+}
+
+.flow-to-ask-liquid {
+    background: linear-gradient(90deg, rgba(204, 0, 0, 0), rgba(204, 0, 0, 0.7), rgba(204, 0, 0, 0));
+    animation: flow-to-ask-liquid 0.8s ease-out;
+    animation-fill-mode: forwards;
+}
+
+/* ============= Indikatoren Stile ============= */
+/* Aufwärts-/Abwärtsüberhang-Indikatoren für Strike-Preis */
+.strike-price-above::before,
+.strike-price-below::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 5;
+}
+
+.strike-price-above::before {
+    top: -3px;
+    background: linear-gradient(90deg, #004d00, #00cc00, #004d00);
+    box-shadow: 0 0 4px rgba(0, 204, 0, 0.6);
+}
+
+.strike-price-below::before {
+    bottom: -3px;
+    background: linear-gradient(90deg, #4d0000, #cc0000, #4d0000);
+    box-shadow: 0 0 4px rgba(204, 0, 0, 0.6);
+}
+
+/* Trend-Indikatoren */
+.price-trend-indicator {
+    position: absolute;
+    right: -2px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.trend-up {
+    bottom: 2px;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent #00cc00 transparent;
+}
+
+.trend-down {
+    top: 2px;
+    border-width: 6px 4px 0 4px;
+    border-color: #cc0000 transparent transparent transparent;
+}
+
+/* Dominanzindikatoren */
+.bid-dominant {
+    border-right: 3px solid rgba(0, 204, 0, 0.6);
+}
+
+.ask-dominant {
+    border-left: 3px solid rgba(204, 0, 0, 0.6);
+}
+
+/* ============= Profil und Marker Stile ============= */
+/* Volumen-Profil am rechten Rand */
+.volume-profile-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.volume-profile-bar {
+    position: absolute;
+    right: 0;
+    height: 20px;
+    background-color: rgba(150, 150, 150, 0.3);
+}
+
+.bid-dominant-profile {
+    background-color: rgba(0, 153, 51, 0.3);
+}
+
+.ask-dominant-profile {
+    background-color: rgba(153, 51, 51, 0.3);
+}
+
+.neutral-profile {
+    background-color: rgba(150, 150, 150, 0.3);
+}
+
+/* Order-Ausführungsmarker */
+.executed-order-marker {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: #ffd700;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: executed 0.5s ease-in-out;
+}
+
+@keyframes executed {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+.pending-order-marker {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: rgba(255, 215, 0, 0.4);
+    border: 1px solid #ffd700;
+    border-radius: 50%;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+/* Neue Order Highlighting */
+.new-order {
+    animation: new-order-anim 1s ease-out;
+}
+
+@keyframes new-order-anim {
+    0% { background-color: rgba(255, 255, 255, 0.2); }
+    100% { background-color: transparent; }
+}
+
+/* Großer Player Markierung */
+.big-player-marker {
+    position: relative;
+}
+
+.big-player-marker::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 5px;
+    background-color: #ff00ff;
+    border-radius: 50%;
+}
+
+/* ============= Tooltip und UI Stile ============= */
+/* Tooltip für Order-Details */
+.tooltip {
+    display: none;
+    position: absolute;
+    background-color: rgba(20, 20, 20, 0.9);
+    border: 1px solid #444;
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 0.7rem;
+    max-width: 250px;
+    z-index: 100;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+}
+
+.dom-row:hover .tooltip,
+.dom-row-extended:hover .tooltip {
+    display: block;
+}
+
+/* Preisspannen-Kontrollen */
+.price-range-controls {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #222;
+    border-bottom: 1px solid #333;
+    gap: 10px;
+}
+
+.price-range-label {
+    color: #aaa;
+    font-size: 0.85rem;
+}
+
+.price-range-input {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #ddd;
+    padding: 3px 5px;
+    width: 60px;
+    border-radius: 3px;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    color: #aaa;
+    gap: 5px;
+    cursor: pointer;
+}
+
+/* Verschiedene Ansichtsmodi */
+.dom-view-compact .dom-row,
+.dom-view-compact .dom-row-extended {
+    height: 18px;
+    font-size: 0.75rem;
+}
+
+.dom-view-expanded .dom-row,
+.dom-view-expanded .dom-row-extended {
+    height: 30px;
+    font-size: 0.9rem;
+}
+
+/* Styles für Marktneigung */
+.market-bullish .current-price-row,
+.market-bullish .current-price-row-enhanced {
+    background-color: rgba(0, 204, 0, 0.05) !important;
+}
+
+.market-bearish .current-price-row,
+.market-bearish .current-price-row-enhanced {
+    background-color: rgba(204, 0, 0, 0.05) !important;
+}
+
+/* Responsive DOM Anpassungen */
+@media (max-width: 768px) {
+    .dom-row-extended {
+        grid-template-columns: 10% 25% 30% 25% 10%;
+    }
+    
+    .price-cell {
+        font-size: 0.8rem;
+    }
+    
+    .volume-cell, .total-cell {
+        font-size: 0.7rem;
+    }
+}
+
+/* Anpassungen für kleinere Bildschirme */
+@media (max-height: 600px) {
+    .dom-container {
+        max-height: 70vh;
+    }
+    
+    .dom-row,
+    .dom-row-extended {
+        height: 20px;
+    }
+    
+    .price-range-controls {
+        padding: 3px;
+        font-size: 0.8rem;
+    }
+}
+.order-executed-buy {
+    animation: order-executed-buy 0.8s ease-out;
+}
+
+.order-executed-sell {
+    animation: order-executed-sell 0.8s ease-out;
+}
+
+@keyframes order-executed-buy {
+    0% { background-color: transparent; }
+    30% { background-color: rgba(0, 204, 0, 0.3); }
+    100% { background-color: transparent; }
+}
+
+@keyframes order-executed-sell {
+    0% { background-color: transparent; }
+    30% { background-color: rgba(204, 0, 0, 0.3); }
+    100% { background-color: transparent; }
+}
+
+/* Execution Flash */
+.execution-flash {
+    position: absolute;
+    right: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    opacity: 1;
+    z-index: 100;
+    animation: flash-fade 0.8s forwards;
+}
+
+@keyframes flash-fade {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(20px); }
+}
+
+.buy-flash {
+    background-color: rgba(0, 153, 51, 0.8);
+    color: white;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.sell-flash {
+    background-color: rgba(153, 51, 51, 0.8);
+    color: white;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Verbesserte Spread-Animation */
+.spread-animation {
+    animation: spread-pulse 0.5s;
+}
+
+@keyframes spread-pulse {
+    0% { background-color: #252525; }
+    50% { background-color: #333; }
+    100% { background-color: #252525; }
+}
+
+.spread-value-change {
+    animation: value-pulse 0.5s;
+}
+
+@keyframes value-pulse {
+    0% { color: #ffd700; }
+    50% { color: white; text-shadow: 0 0 5px rgba(255, 215, 0, 0.8); }
+    100% { color: #ffd700; }
+}
+
+.arrow-pulse {
+    animation: arrow-pulse-anim 0.5s ease-out;
+}
+
+@keyframes arrow-pulse-anim {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.5); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+/* Verbesserte Flow Bar Animation */
+.flow-bar-pulse-up {
+    animation: flow-bar-pulse-up-anim 0.5s ease-out;
+}
+
+.flow-bar-pulse-down {
+    animation: flow-bar-pulse-down-anim 0.5s ease-out;
+}
+
+@keyframes flow-bar-pulse-up-anim {
+    0% { background-color: rgba(0, 153, 51, 0.6); }
+    50% { background-color: rgba(0, 204, 0, 0.9); }
+    100% { background-color: rgba(0, 153, 51, 0.6); }
+}
+
+@keyframes flow-bar-pulse-down-anim {
+    0% { background-color: rgba(153, 51, 51, 0.6); }
+    50% { background-color: rgba(204, 0, 0, 0.9); }
+    100% { background-color: rgba(153, 51, 51, 0.6); }
+}
+
+/* ============= ZENTRALE STEUERELEMENTE ============= */
+
+/* Header Controls Container */
+.header-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 20;
+}
+
+/* Zentralisierte Steuerelemente */
+.central-controls {
+    background-color: rgba(30, 30, 30, 0.8);
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Viewport-Steuerelemente */
+.viewport-controls {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 20;
+}
+
+.control-btn {
+    width: 24px;
+    height: 24px;
+    background-color: rgba(40, 40, 40, 0.8);
+    color: #ccc;
+    border: 1px solid #555;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.control-btn:hover {
+    background-color: rgba(60, 60, 60, 0.9);
+    color: white;
+}
+
+/* Datenquellen-Toggle */
+.data-source-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 26px;
+}
+
+.toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch .toggle-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(40, 40, 40, 0.8);
+    border-radius: 13px;
+    border: 1px solid #555;
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+}
+
+.toggle-switch .toggle-label:before {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 20px;
+    left: 3px;
+    bottom: 2px;
+    background-color: #222;
+    border-radius: 10px;
+    transition: transform 0.3s;
+    z-index: 1;
+}
+
+.toggle-option {
+    z-index: 2;
+    color: #aaa;
+    font-size: 11px;
+    padding: 0 5px;
+}
+
+.toggle-input:checked + .toggle-label {
+    background-color: rgba(0, 153, 51, 0.6);
+}
+
+.toggle-input:checked + .toggle-label:before {
+    transform: translateX(44px);
+}
+
+/* Zoom-Indikator */
+.zoom-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(20, 20, 20, 0.8);
+    color: #ddd;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    border: 1px solid #444;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+
+.zoom-indicator.visible {
+    opacity: 1;
+}
+
+/* Hilfe-Dialog Verbesserungen */
+.help-dialog {
+    background-color: #1a1a1a;
+    color: #ddd;
+    border: 1px solid #444;
+}
+
+.help-dialog-header {
+    background-color: #222;
+    border-bottom: 1px solid #333;
+}
+
+.help-dialog-content table th {
+    background-color: #262626;
+}
+
+.help-dialog-content table tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Entfernen der doppelten Steuerelemente */
+.dom-container + .price-range-controls,
+.dom-container + .zoom-controls {
+    display: none;
+}
