@@ -6,7 +6,6 @@ import React from 'react';
 import useWebSocket from './hooks/useWebSocket';
 import Header from './components/Header/Header';
 import PriceChart from './components/PriceChart/PriceChart';
-import OrderbookHeatmap from './components/OrderbookHeatmap/OrderbookHeatmap';
 import VolumeFootprint from './components/VolumeFootprint/VolumeFootprint';
 import WallTracker from './components/WallTracker/WallTracker';
 import LiquidationOverlay from './components/LiquidationOverlay/LiquidationOverlay';
@@ -22,17 +21,10 @@ function App() {
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Side: Chart + Heatmap */}
-        <div className="w-2/3 flex flex-col border-r border-gray-800">
-          {/* Price Chart */}
-          <div className="h-2/3 border-b border-gray-800">
-            <PriceChart />
-          </div>
-
-          {/* Orderbook Heatmap */}
-          <div className="h-1/3">
-            <OrderbookHeatmap />
-          </div>
+        {/* Left Side: Chart with Orderbook Overlay */}
+        <div className="w-2/3 border-r border-gray-800">
+          {/* Price Chart with built-in Orderbook Overlay */}
+          <PriceChart />
         </div>
 
         {/* Right Side: Info Panels */}

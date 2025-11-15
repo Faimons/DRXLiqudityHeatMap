@@ -10,12 +10,14 @@ from backend.config import CORS_ORIGINS, WS_SERVER_HOST, WS_SERVER_PORT
 from backend.cache.redis_manager import redis_manager
 from backend.collectors.binance_orderbook import orderbook_collector
 from backend.collectors.binance_trades import trades_collector
+from backend.collectors.binance_candles import start_candle_collector, get_historical_candles, TIMEFRAMES
 from backend.websocket.server import (
     websocket_endpoint,
     stream_orderbook_updates,
     stream_trade_updates,
     stream_footprint_updates,
-    stream_liquidation_updates
+    stream_liquidation_updates,
+    stream_candle_updates
 )
 from backend.utils.logger import setup_logger
 
@@ -43,7 +45,9 @@ async def lifespan(app: FastAPI):
         # Start data collectors
         orderbook_task = asyncio.create_task(orderbook_collector.start())
         trades_task = asyncio.create_task(trades_collector.start())
-        background_tasks.extend([orderbook_task, trades_task])
+        # Start default candle collector (15m)
+        candle_task = asyncio.create_task(start_candle_collector('15m'))
+        background_tasks.extend([orderbook_task, trades_task, candle_task])
         logger.info("Data collectors started")
 
         # Start WebSocket stream processors
@@ -52,11 +56,13 @@ async def lifespan(app: FastAPI):
         stream_trades_task = asyncio.create_task(stream_trade_updates())
         stream_footprint_task = asyncio.create_task(stream_footprint_updates())
         stream_liquidations_task = asyncio.create_task(stream_liquidation_updates())
+        stream_candles_task = asyncio.create_task(stream_candle_updates())
         background_tasks.extend([
             stream_orderbook_task,
             stream_trades_task,
             stream_footprint_task,
-            stream_liquidations_task
+            stream_liquidations_task,
+            stream_candles_task
         ])
         logger.info("WebSocket stream processors started")
 
@@ -207,6 +213,38 @@ async def get_liquidations():
     mid_price = (bids[0][0] + asks[0][0]) / 2 if bids and asks else 0
 
     return process_liquidations(mid_price, orderbook)
+
+
+@app.get("/api/candles/{timeframe}")
+async def get_candles(timeframe: str, limit: int = 500):
+    """
+    Get historical candlestick data
+
+    Args:
+        timeframe: One of 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 12h, 1d
+        limit: Number of candles (max 1000)
+    """
+    if timeframe not in TIMEFRAMES:
+        return {"error": f"Invalid timeframe. Must be one of: {', '.join(TIMEFRAMES)}"}
+
+    candles = await get_historical_candles(timeframe, limit)
+    if not candles:
+        return {"error": "Failed to fetch candles"}
+
+    return {
+        "timeframe": timeframe,
+        "candles": candles,
+        "count": len(candles)
+    }
+
+
+@app.get("/api/timeframes")
+async def get_timeframes():
+    """Get list of supported timeframes"""
+    return {
+        "timeframes": TIMEFRAMES,
+        "default": "15m"
+    }
 
 
 if __name__ == "__main__":

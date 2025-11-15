@@ -172,6 +172,22 @@ async def stream_liquidation_updates():
             await asyncio.sleep(1)
 
 
+async def stream_candle_updates():
+    """Stream candle updates to all clients"""
+
+    async def handle_candle_update(data: dict):
+        """Handle candle update from Redis"""
+        try:
+            await manager.broadcast({
+                "type": "candle",
+                "data": data
+            })
+        except Exception as e:
+            logger.error(f"Error processing candle update: {e}")
+
+    await redis_manager.subscribe("candle_updates", handle_candle_update)
+
+
 async def handle_client_message(websocket: WebSocket, message: str):
     """
     Handle incoming message from client

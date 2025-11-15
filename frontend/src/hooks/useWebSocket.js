@@ -53,6 +53,11 @@ const useWebSocket = () => {
           }
           break;
 
+        case 'candle':
+          // Real-time candle update
+          // TODO: Update chart with new candle
+          break;
+
         case 'pong':
           // Heartbeat response
           break;
