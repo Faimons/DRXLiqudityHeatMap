@@ -1,49 +1,43 @@
 /**
  * Main App Component
- * Layout and composition of all components
+ * Professional Multi-View Trading Platform
  */
-import React from 'react';
+import React, { useState } from 'react';
 import useWebSocket from './hooks/useWebSocket';
-import Header from './components/Header/Header';
-import PriceChart from './components/PriceChart/PriceChart';
-import VolumeFootprint from './components/VolumeFootprint/VolumeFootprint';
-import WallTracker from './components/WallTracker/WallTracker';
-import LiquidationOverlay from './components/LiquidationOverlay/LiquidationOverlay';
+import TabNavigation from './components/Navigation/TabNavigation';
+import HeatmapView from './views/HeatmapView';
+import ChartView from './views/ChartView';
+import DOMView from './views/DOMView';
 
 function App() {
   // Initialize WebSocket connection
   useWebSocket();
 
+  // Active tab state
+  const [activeTab, setActiveTab] = useState('heatmap');
+
+  // Render active view
+  const renderActiveView = () => {
+    switch (activeTab) {
+      case 'heatmap':
+        return <HeatmapView />;
+      case 'chart':
+        return <ChartView />;
+      case 'dom':
+        return <DOMView />;
+      default:
+        return <HeatmapView />;
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col bg-background-primary text-white font-mono">
-      {/* Header */}
-      <Header />
+      {/* Tab Navigation */}
+      <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Side: Chart with Orderbook Overlay */}
-        <div className="w-2/3 border-r border-gray-800">
-          {/* Price Chart with built-in Orderbook Overlay */}
-          <PriceChart />
-        </div>
-
-        {/* Right Side: Info Panels */}
-        <div className="w-1/3 flex flex-col">
-          {/* Wall Tracker */}
-          <div className="h-1/3 border-b border-gray-800">
-            <WallTracker />
-          </div>
-
-          {/* Volume Footprint */}
-          <div className="h-1/3 border-b border-gray-800">
-            <VolumeFootprint />
-          </div>
-
-          {/* Liquidation Overlay */}
-          <div className="h-1/3">
-            <LiquidationOverlay />
-          </div>
-        </div>
+      {/* Active View */}
+      <div className="flex-1 overflow-hidden">
+        {renderActiveView()}
       </div>
     </div>
   );
