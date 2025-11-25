@@ -42,7 +42,26 @@ A professional, real-time trading dashboard for BTC/USDT with orderbook heatmap,
 - Node.js 18+
 - Redis (or use Docker)
 
-### Option 1: Docker (Recommended)
+### Option 1: Deploy to Google Cloud ☁️
+
+Deploy to production on Google Cloud Platform in minutes!
+
+```bash
+# Quick deployment (automated)
+./deploy-gcp.sh
+
+# See GCP_QUICKSTART.md for details
+```
+
+**What you get:**
+- ✅ Fully managed infrastructure (Cloud Run + Redis)
+- ✅ Auto-scaling (0 to thousands of users)
+- ✅ HTTPS/SSL included
+- ✅ ~$60/month for moderate usage
+
+📖 **Full guide**: [GCP_QUICKSTART.md](./GCP_QUICKSTART.md) | [DEPLOYMENT_GCP.md](./docs/DEPLOYMENT_GCP.md)
+
+### Option 2: Docker (Local Development)
 
 ```bash
 # Clone repository
@@ -62,7 +81,7 @@ docker-compose up -d
 # API Docs: http://localhost:8000/docs
 ```
 
-### Option 2: Local Development
+### Option 3: Local Development
 
 #### Backend Setup
 
